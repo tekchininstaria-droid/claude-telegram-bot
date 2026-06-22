@@ -8,6 +8,8 @@ services:
       - TELEGRAM_ALLOWED_USERS=${TELEGRAM_ALLOWED_USERS}
       - CLAUDE_WORKING_DIR=/vault
       - ALLOWED_PATHS=/vault,/root/.claude
+      # Whitelist root for --dangerously-skip-permissions (bot uses bypassPermissions mode)
+      - IS_SANDBOX=1
     volumes:
       - claude_auth:/root/.claude
       - vault:/vault
