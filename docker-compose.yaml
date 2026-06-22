@@ -13,6 +13,19 @@ services:
     volumes:
       - claude_auth:/root/.claude
       - vault:/vault
+  obsidian-sync:
+    build:
+      context: .
+      dockerfile: Dockerfile.obsidian
+    container_name: obsidian-sync
+    restart: unless-stopped
+    volumes:
+      - vault:/vault
+      - obsidian_cfg:/root
+    # Retry loop: until `ob login` + `ob sync-setup` have been run once (state
+    # persists on the obsidian_cfg + vault volumes), continuous sync isn't ready.
+    command: ["sh", "-c", "while true; do ob sync --path /vault --continuous || { echo 'obsidian-sync: not configured yet (run ob login + ob sync-setup), retrying in 30s'; sleep 30; }; done"]
 volumes:
   claude_auth:
   vault:
+  obsidian_cfg:
