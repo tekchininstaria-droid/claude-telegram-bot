@@ -10,6 +10,11 @@ services:
       - ALLOWED_PATHS=/vault,/root/.claude
       # Whitelist root for --dangerously-skip-permissions (bot uses bypassPermissions mode)
       - IS_SANDBOX=1
+      # Pull portable Claude config (skills/agents/commands + dokploy MCP) at boot.
+      # Deploy key (base64) lets the entrypoint clone the private claude-config repo.
+      - CLAUDE_CONFIG_DEPLOY_KEY_B64=${CLAUDE_CONFIG_DEPLOY_KEY_B64}
+      - DOKPLOY_URL=${DOKPLOY_URL}
+      - DOKPLOY_API_KEY=${DOKPLOY_API_KEY}
     volumes:
       - claude_auth:/root/.claude
       - vault:/vault
