@@ -11,7 +11,7 @@ CONFIG_DIR=/root/.claude/claude-config
 # private claude-config repo over SSH.
 if [ -n "${CLAUDE_CONFIG_DEPLOY_KEY_B64:-}" ]; then
   mkdir -p /root/.ssh && chmod 700 /root/.ssh
-  printf '%s' "$CLAUDE_CONFIG_DEPLOY_KEY_B64" | base64 -d > /root/.ssh/claude_config_deploy
+  printf '%s' "$CLAUDE_CONFIG_DEPLOY_KEY_B64" | tr -d '[:space:]' | base64 -d > /root/.ssh/claude_config_deploy
   chmod 600 /root/.ssh/claude_config_deploy
   export GIT_SSH_COMMAND="ssh -i /root/.ssh/claude_config_deploy -o IdentitiesOnly=yes -o StrictHostKeyChecking=accept-new"
 fi

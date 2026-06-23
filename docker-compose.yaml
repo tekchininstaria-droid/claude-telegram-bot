@@ -10,6 +10,8 @@ services:
       - ALLOWED_PATHS=/vault,/root/.claude
       # Whitelist root for --dangerously-skip-permissions (bot uses bypassPermissions mode)
       - IS_SANDBOX=1
+      # Claude auth for the headless agent (long-lived token from `claude setup-token`).
+      - CLAUDE_CODE_OAUTH_TOKEN=${CLAUDE_CODE_OAUTH_TOKEN}
       # Pull portable Claude config (skills/agents/commands + dokploy MCP) at boot.
       # Deploy key (base64) lets the entrypoint clone the private claude-config repo.
       - CLAUDE_CONFIG_DEPLOY_KEY_B64=${CLAUDE_CONFIG_DEPLOY_KEY_B64}
