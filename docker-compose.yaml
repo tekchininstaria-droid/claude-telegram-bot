@@ -12,6 +12,8 @@ services:
       - IS_SANDBOX=1
       # Claude auth for the headless agent (long-lived token from `claude setup-token`).
       - CLAUDE_CODE_OAUTH_TOKEN=${CLAUDE_CODE_OAUTH_TOKEN}
+      # GitHub PAT: powers git clone/push (entrypoint) and the github MCP server.
+      - GITHUB_TOKEN=${GITHUB_TOKEN}
       # Pull portable Claude config (skills/agents/commands + dokploy MCP) at boot.
       # Deploy key (base64) lets the entrypoint clone the private claude-config repo.
       - CLAUDE_CONFIG_DEPLOY_KEY_B64=${CLAUDE_CONFIG_DEPLOY_KEY_B64}
