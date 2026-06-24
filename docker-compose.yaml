@@ -14,6 +14,8 @@ services:
       - CLAUDE_CODE_OAUTH_TOKEN=${CLAUDE_CODE_OAUTH_TOKEN}
       # GitHub PAT: powers git clone/push (entrypoint) and the github MCP server.
       - GITHUB_TOKEN=${GITHUB_TOKEN}
+      # browser-use cloud MCP — browser automation (key: cloud.browser-use.com/settings)
+      - BROWSER_USE_API_KEY=${BROWSER_USE_API_KEY}
       # Pull portable Claude config (skills/agents/commands + dokploy MCP) at boot.
       # Deploy key (base64) lets the entrypoint clone the private claude-config repo.
       - CLAUDE_CONFIG_DEPLOY_KEY_B64=${CLAUDE_CONFIG_DEPLOY_KEY_B64}
