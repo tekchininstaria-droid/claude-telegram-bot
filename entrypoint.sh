@@ -41,4 +41,12 @@ if [ -n "${GITHUB_TOKEN:-}" ]; then
   echo "[entrypoint] configured GitHub HTTPS credentials for git"
 fi
 
+# Seed the vault with the assistant brain + memory structure on first boot.
+# cp -n never overwrites, so anything I've since edited in Obsidian is preserved;
+# only missing files (e.g. a brand-new vault) get the starter scaffold.
+if [ -d /app/vault-seed ] && [ -d /vault ]; then
+  cp -rn /app/vault-seed/. /vault/ 2>/dev/null || true
+  echo "[entrypoint] seeded vault scaffold (missing files only)"
+fi
+
 exec "$@"
