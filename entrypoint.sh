@@ -29,4 +29,16 @@ if [ -f "$CONFIG_DIR/install.sh" ]; then
   INSTALL_SETTINGS=0 bash "$CONFIG_DIR/install.sh" || echo "[entrypoint] install.sh failed, continuing"
 fi
 
+# Give the bot's Claude git access to GitHub over HTTPS using a PAT. Stored in
+# the container's ephemeral /root (not a volume), re-created each boot. Does not
+# touch the git@github.com SSH path used to clone claude-config above.
+if [ -n "${GITHUB_TOKEN:-}" ]; then
+  git config --global credential.helper store
+  printf 'https://x-access-token:%s@github.com\n' "$GITHUB_TOKEN" > /root/.git-credentials
+  chmod 600 /root/.git-credentials
+  git config --global user.name "${GIT_AUTHOR_NAME:-claude-tg}"
+  git config --global user.email "${GIT_AUTHOR_EMAIL:-tekchininstaria@gmail.com}"
+  echo "[entrypoint] configured GitHub HTTPS credentials for git"
+fi
+
 exec "$@"
