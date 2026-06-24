@@ -18,7 +18,13 @@ fi
 
 echo "[entrypoint] syncing claude-config from $CONFIG_REPO ..."
 if [ -d "$CONFIG_DIR/.git" ]; then
-  git -C "$CONFIG_DIR" pull --ff-only || echo "[entrypoint] pull failed, using existing checkout"
+  # Hard-reset to origin/main: the checkout is disposable, so a locally-dirty
+  # file (e.g. servers.sh) must never block updates the way `pull --ff-only` did.
+  if git -C "$CONFIG_DIR" fetch --depth 1 origin main; then
+    git -C "$CONFIG_DIR" reset --hard origin/main || echo "[entrypoint] reset failed, using existing checkout"
+  else
+    echo "[entrypoint] fetch failed, using existing checkout"
+  fi
 else
   git clone --depth 1 "$CONFIG_REPO" "$CONFIG_DIR" || echo "[entrypoint] clone failed (config not applied)"
 fi
